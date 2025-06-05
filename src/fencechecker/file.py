@@ -55,8 +55,10 @@ def report_processed_file(
         status_color = "green" if code_block["return_code"] == 0 else "red"
         status_title = "Success" if code_block["return_code"] == 0 else "Error"
         filepath = processed_file["filepath"]
-        group = Group(
-            f"[bold {status_color}]{status_title}[/bold {status_color}] ([link=file://{filepath.absolute()}]{filepath.absolute()}[/link] at line: {code_block['start_line']})",
-            Panel(syntax),
-        )
+        status_markup = f"[bold {status_color}]{status_title}[/bold {status_color}]"
+        file_link_markup = f"[link=file://{filepath.absolute()}]{filepath.absolute()}[/link]"
+        file_line_markup = f"line: {code_block['start_line']}"
+        file_info_markup = f"({file_link_markup} at {file_line_markup})"
+        group = Group(f"{status_markup} {file_info_markup}", Panel(syntax))
+
         console.print(Panel(group))
