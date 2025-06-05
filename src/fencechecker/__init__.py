@@ -1,15 +1,17 @@
 import os
 import subprocess
 import sys
+from typing import Annotated
 
+import typer
 from rich.console import Console, Group
 from rich.panel import Panel
 from rich.syntax import Syntax
 from mrkdwn_analysis import MarkdownAnalyzer
 
 
-def main() -> None:
-    analyzer = MarkdownAnalyzer("./TEST.md")
+def implementation(readme_path: Annotated[str, typer.Argument()] = "README.md") -> None:
+    analyzer = MarkdownAnalyzer(readme_path)
     code_blocks = analyzer.identify_code_blocks().get("Code block")
     py_code_blocks = [
         code_block
@@ -47,3 +49,6 @@ def main() -> None:
     console.print(f"{os.linesep}[bold]Total Errors: {error_count}")
 
     sys.exit(error_count)
+
+def main() -> None:
+    typer.run(implementation)
