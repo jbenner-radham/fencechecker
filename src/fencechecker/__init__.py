@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from pprint import pprint
 from rich.console import Console, Group
 from rich.panel import Panel
@@ -20,13 +21,17 @@ for index, process in enumerate(completed_processes):
 
     if process.returncode == 0:
         group = Group(
-            syntax,
-            Panel(f"[bold green]Success[/bold green] [italic](at line: {code_block.get('start_line')})"),
+            f"[bold green]Success[/bold green] [italic](at line: {code_block.get('start_line')})",
+            Panel(syntax),
         )
         console.print(Panel(group))
     else:
         group = Group(
-            syntax,
-            Panel(f"[bold red]Error[/bold red] [italic](at line: {code_block.get('start_line')})")
+            f"[bold red]Error[/bold red] [italic](at line: {code_block.get('start_line')})",
+            Panel(syntax),
         )
         console.print(Panel(group))
+
+error_count = sum(1 for process in completed_processes if process.returncode != 0)
+
+sys.exit(error_count)
