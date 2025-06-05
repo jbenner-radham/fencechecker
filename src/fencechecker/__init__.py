@@ -10,8 +10,8 @@ from rich.syntax import Syntax
 from mrkdwn_analysis import MarkdownAnalyzer
 
 
-def implementation(readme_path: Annotated[str, typer.Argument()] = "README.md") -> None:
-    analyzer = MarkdownAnalyzer(readme_path)
+def implementation(filepath: Annotated[str, typer.Argument()] = "README.md") -> None:
+    analyzer = MarkdownAnalyzer(filepath)
     code_blocks = analyzer.identify_code_blocks().get("Code block")
     py_code_blocks = [
         code_block
