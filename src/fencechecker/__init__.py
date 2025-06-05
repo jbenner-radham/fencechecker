@@ -1,2 +1,32 @@
-def hello() -> str:
-    return "Hello from fencechecker!"
+import subprocess
+from pprint import pprint
+from rich.console import Console, Group
+from rich.panel import Panel
+from rich.syntax import Syntax
+
+from mrkdwn_analysis import MarkdownAnalyzer
+
+analyzer = MarkdownAnalyzer("./TEST.md")
+code_blocks = analyzer.identify_code_blocks().get("Code block")
+py_code_blocks = [code_block for code_block in code_blocks if code_block.get("language") == "python" or "python3"]
+
+completed_processes = [subprocess.run(["python3", "-c", code_block.get("content")], capture_output=True) for code_block in py_code_blocks]
+
+console = Console()
+
+for index, process in enumerate(completed_processes):
+    code_block = py_code_blocks[index]
+    syntax = Syntax(code_block.get("content"), "python")
+
+    if process.returncode == 0:
+        group = Group(
+            syntax,
+            Panel(f"[bold green]Success[/bold green] [italic](at line: {code_block.get('start_line')})"),
+        )
+        console.print(Panel(group))
+    else:
+        group = Group(
+            syntax,
+            Panel(f"[bold red]Error[/bold red] [italic](at line: {code_block.get('start_line')})")
+        )
+        console.print(Panel(group))
