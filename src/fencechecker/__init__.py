@@ -64,8 +64,13 @@ def process_file(filepath: Path) -> ProcessedFile:
     }
 
 
-def report_processed_file(processed_file: ProcessedFile, console: Console) -> None:
+def report_processed_file(
+    processed_file: ProcessedFile, console: Console, only_report_errors: bool
+) -> None:
     for code_block in processed_file["code_blocks"]:
+        if only_report_errors and code_block["return_code"] == 0:
+            continue
+
         syntax = Syntax(code_block["content"], "python")
         status_color = "green" if code_block["return_code"] == 0 else "red"
         status_title = "Success" if code_block["return_code"] == 0 else "Error"
@@ -77,7 +82,17 @@ def report_processed_file(processed_file: ProcessedFile, console: Console) -> No
         console.print(Panel(group))
 
 
-def implementation(filepaths: Annotated[list[Path], typer.Argument()]) -> None:
+def app(
+    filepaths: Annotated[
+        list[Path], typer.Argument(help="The Markdown files to process.")
+    ],
+    only_report_errors: Annotated[
+        bool,
+        typer.Option(
+            "--only-report-errors", "-e", help="Only include errors when reporting."
+        ),
+    ] = False,
+) -> None:
     console = Console()
     total_errors = 0
 
@@ -85,7 +100,9 @@ def implementation(filepaths: Annotated[list[Path], typer.Argument()]) -> None:
         processed_file = process_file(filepath)
         total_errors += processed_file["error_count"]
 
-        report_processed_file(processed_file, console)
+        report_processed_file(
+            processed_file, console=console, only_report_errors=only_report_errors
+        )
 
     console.print(f"{os.linesep}[bold]Total Errors: {total_errors}")
 
@@ -93,4 +110,4 @@ def implementation(filepaths: Annotated[list[Path], typer.Argument()]) -> None:
 
 
 def main() -> None:
-    typer.run(implementation)
+    typer.run(app)
