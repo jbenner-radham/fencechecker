@@ -1,6 +1,5 @@
 import os
 import subprocess
-import sys
 from pathlib import Path
 from typing import Annotated, TypedDict
 
@@ -17,7 +16,20 @@ class MarkdownAnalyzerCodeBlock(TypedDict):
     language: str
 
 
-def implementation(filepath: Annotated[Path, typer.Argument()]) -> None:
+class ProcessedCodeBlock(TypedDict):
+    start_line: int
+    content: str
+    language: str
+    return_code: int
+
+
+class ProcessedFile(TypedDict):
+    filepath: Path
+    code_blocks: list[ProcessedCodeBlock]
+    error_count: int
+
+
+def process_file(filepath: Path) -> ProcessedFile:
     analyzer = MarkdownAnalyzer(str(filepath))
     code_blocks = analyzer.identify_code_blocks().get("Code block")
     py_code_blocks = [
@@ -31,31 +43,53 @@ def implementation(filepath: Annotated[Path, typer.Argument()]) -> None:
         )
         for code_block in py_code_blocks
     ]
-    console = Console()
+    processed_code_blocks: list[ProcessedCodeBlock] = []
 
-    for index, process in enumerate(completed_processes):
+    for index, completed_process in enumerate(completed_processes):
         code_block = py_code_blocks[index]
-        syntax = Syntax(code_block.get("content"), "python")
 
-        if process.returncode == 0:
-            group = Group(
-                f"[bold green]Success[/bold green] ([link=file://{filepath.absolute()}]{filepath.name}[/link] at line: {code_block.get('start_line')})",
-                Panel(syntax),
-            )
-            console.print(Panel(group))
-        else:
-            group = Group(
-                f"[bold red]Error[/bold red] ([link=file://{filepath.absolute()}]{filepath.name}[/link] at line: {code_block.get('start_line')})",
-                Panel(syntax),
-            )
-            console.print(Panel(group))
-            # console.print(Panel(syntax, title="[bold red]Error", title_align="left", subtitle=f"at line: {code_block.get('start_line')}", subtitle_align="right"))
+        processed_code_blocks.append(
+            {
+                "start_line": code_block["start_line"],
+                "content": code_block["content"],
+                "language": code_block["language"],
+                "return_code": completed_process.returncode,
+            }
+        )
 
-    error_count = sum(1 for process in completed_processes if process.returncode != 0)
+    return {
+        "filepath": filepath,
+        "code_blocks": processed_code_blocks,
+        "error_count": sum(process.returncode != 0 for process in completed_processes),
+    }
 
-    console.print(f"{os.linesep}[bold]Total Errors: {error_count}")
 
-    sys.exit(error_count)
+def report_processed_file(processed_file: ProcessedFile, console: Console) -> None:
+    for code_block in processed_file["code_blocks"]:
+        syntax = Syntax(code_block["content"], "python")
+        status_color = "green" if code_block["return_code"] == 0 else "red"
+        status_title = "Success" if code_block["return_code"] == 0 else "Error"
+        filepath = processed_file["filepath"]
+        group = Group(
+            f"[bold {status_color}]{status_title}[/bold {status_color}] ([link=file://{filepath.absolute()}]{filepath.absolute()}[/link] at line: {code_block['start_line']})",
+            Panel(syntax),
+        )
+        console.print(Panel(group))
+
+
+def implementation(filepaths: Annotated[list[Path], typer.Argument()]) -> None:
+    console = Console()
+    total_errors = 0
+
+    for filepath in filepaths:
+        processed_file = process_file(filepath)
+        total_errors += processed_file["error_count"]
+
+        report_processed_file(processed_file, console)
+
+    console.print(f"{os.linesep}[bold]Total Errors: {total_errors}")
+
+    raise typer.Exit(code=total_errors)
 
 
 def main() -> None:
