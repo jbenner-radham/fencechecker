@@ -39,7 +39,10 @@ def main() -> None:
                 Panel(syntax),
             )
             console.print(Panel(group))
+            # console.print(Panel(syntax, title="[bold red]Error", title_align="left", subtitle=f"at line: {code_block.get('start_line')}", subtitle_align="right"))
 
     error_count = sum(1 for process in completed_processes if process.returncode != 0)
+
+    console.print(f"[bold]Total Errors: {error_count}")
 
     sys.exit(error_count)
