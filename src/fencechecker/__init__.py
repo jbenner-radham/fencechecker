@@ -32,13 +32,13 @@ def implementation(filepath: Annotated[str, typer.Argument()] = "README.md") -> 
 
         if process.returncode == 0:
             group = Group(
-                f"[bold green]Success[/bold green] [italic](at line: {code_block.get('start_line')})",
+                f"[bold green]Success[/bold green] [italic]([bold underline]{filepath}[/bold underline] at line: {code_block.get('start_line')})",
                 Panel(syntax),
             )
             console.print(Panel(group))
         else:
             group = Group(
-                f"[bold red]Error[/bold red] [italic](at line: {code_block.get('start_line')})",
+                f"[bold red]Error[/bold red] [italic]([bold underline]{filepath}[/bold underline] at line: {code_block.get('start_line')})",
                 Panel(syntax),
             )
             console.print(Panel(group))
