@@ -1,6 +1,7 @@
+import os
 import subprocess
 import sys
-from pprint import pprint
+
 from rich.console import Console, Group
 from rich.panel import Panel
 from rich.syntax import Syntax
@@ -43,6 +44,6 @@ def main() -> None:
 
     error_count = sum(1 for process in completed_processes if process.returncode != 0)
 
-    console.print(f"[bold]Total Errors: {error_count}")
+    console.print(f"{os.linesep}[bold]Total Errors: {error_count}")
 
     sys.exit(error_count)
