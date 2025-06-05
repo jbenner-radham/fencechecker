@@ -12,6 +12,9 @@ dependencies = [
     "rich>=14.0.0",
 ]
 
+[project.scripts]
+fencechecker = "fencechecker:main"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
