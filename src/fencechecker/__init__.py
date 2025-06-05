@@ -29,7 +29,7 @@ class ProcessedFile(TypedDict):
     error_count: int
 
 
-def process_file(filepath: Path) -> ProcessedFile:
+def process_file(filepath: Path, python_binary: str) -> ProcessedFile:
     analyzer = MarkdownAnalyzer(str(filepath))
     code_blocks = analyzer.identify_code_blocks().get("Code block")
     py_code_blocks = [
@@ -39,7 +39,7 @@ def process_file(filepath: Path) -> ProcessedFile:
     ]
     completed_processes = [
         subprocess.run(
-            ["python3", "-c", code_block.get("content")], capture_output=True
+            [python_binary, "-c", code_block.get("content")], capture_output=True
         )
         for code_block in py_code_blocks
     ]
@@ -92,12 +92,20 @@ def app(
             "--only-report-errors", "-e", help="Only include errors when reporting."
         ),
     ] = False,
+    python_binary: Annotated[
+        str,
+        typer.Option(
+            "--python-binary",
+            "-b",
+            help="The Python binary to use to execute code.",
+        ),
+    ] = "python3",
 ) -> None:
     console = Console()
     total_errors = 0
 
     for filepath in filepaths:
-        processed_file = process_file(filepath)
+        processed_file = process_file(filepath, python_binary=python_binary)
         total_errors += processed_file["error_count"]
 
         report_processed_file(
