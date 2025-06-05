@@ -1,7 +1,8 @@
 import os
 import subprocess
 import sys
-from typing import Annotated
+from pathlib import Path
+from typing import Annotated, TypedDict
 
 import typer
 from rich.console import Console, Group
@@ -10,8 +11,14 @@ from rich.syntax import Syntax
 from mrkdwn_analysis import MarkdownAnalyzer
 
 
-def implementation(filepath: Annotated[str, typer.Argument()] = "README.md") -> None:
-    analyzer = MarkdownAnalyzer(filepath)
+class MarkdownAnalyzerCodeBlock(TypedDict):
+    start_line: int
+    content: str
+    language: str
+
+
+def implementation(filepath: Annotated[Path, typer.Argument()]) -> None:
+    analyzer = MarkdownAnalyzer(str(filepath))
     code_blocks = analyzer.identify_code_blocks().get("Code block")
     py_code_blocks = [
         code_block
@@ -32,13 +39,13 @@ def implementation(filepath: Annotated[str, typer.Argument()] = "README.md") -> 
 
         if process.returncode == 0:
             group = Group(
-                f"[bold green]Success[/bold green] [italic]([bold underline]{filepath}[/bold underline] at line: {code_block.get('start_line')})",
+                f"[bold green]Success[/bold green] ([link=file://{filepath.absolute()}]{filepath.name}[/link] at line: {code_block.get('start_line')})",
                 Panel(syntax),
             )
             console.print(Panel(group))
         else:
             group = Group(
-                f"[bold red]Error[/bold red] [italic]([bold underline]{filepath}[/bold underline] at line: {code_block.get('start_line')})",
+                f"[bold red]Error[/bold red] ([link=file://{filepath.absolute()}]{filepath.name}[/link] at line: {code_block.get('start_line')})",
                 Panel(syntax),
             )
             console.print(Panel(group))
@@ -49,6 +56,7 @@ def implementation(filepath: Annotated[str, typer.Argument()] = "README.md") -> 
     console.print(f"{os.linesep}[bold]Total Errors: {error_count}")
 
     sys.exit(error_count)
+
 
 def main() -> None:
     typer.run(implementation)
