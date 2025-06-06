@@ -11,7 +11,13 @@ from fencechecker.types import ProcessedCodeBlock, ProcessedFile
 
 def app(
     filepaths: Annotated[
-        list[Path], typer.Argument(help="The Markdown files to process.")
+        list[Path],
+        typer.Argument(
+            help="The Markdown files to process.",
+            exists=True,
+            file_okay=True,
+            readable=True,
+        ),
     ],
     only_report_errors: Annotated[
         bool,
