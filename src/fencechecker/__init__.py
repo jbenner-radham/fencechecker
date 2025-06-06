@@ -29,7 +29,7 @@ def app(
         str,
         typer.Option(
             "--python-binary",
-            "-b",
+            "-p",
             help="The Python binary to use to execute code.",
         ),
     ] = "python3",
