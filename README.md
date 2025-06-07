@@ -10,18 +10,20 @@ Usage
 -----
 
 ```sh-session
-❯ fencechecker --help         
-                                                                                                                                                                                    
- Usage: fencechecker [OPTIONS] FILEPATHS...                                                                                                                                         
-                                                                                                                                                                                    
-╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    filepaths      FILEPATHS...  The Markdown files to process. [required]                                          │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --only-report-errors  -e            Only include errors when reporting.                                              │
-│ --python-binary       -p      TEXT  The Python binary to use to execute code. [default: python3]                     │
-│ --help                              Show this message and exit.                                                      │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+❯ fencechecker --help
+                                                                                
+ Usage: fencechecker [OPTIONS] FILEPATHS...                                     
+                                                                                
+╭─ Arguments ──────────────────────────────────────────────────────────────────╮
+│ *    filepaths      FILEPATHS...  The Markdown files to process. [required]  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --only-report-errors  -e            Only include errors when reporting.      │
+│ --python-binary       -p      TEXT  The Python binary to use to execute      │
+│                                     code.                                    │
+│                                     [default: python3]                       │
+│ --help                              Show this message and exit.              │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 **NOTE**: The exit code of the app is the number of errors encountered. Thus, a run without issue will exit with a code
