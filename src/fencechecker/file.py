@@ -6,7 +6,7 @@ from rich.console import Console, Group
 from rich.panel import Panel
 from rich.syntax import Syntax
 
-from fencechecker.types import ProcessedFile, ProcessedCodeBlock
+from fencechecker.types import ProcessedCodeBlock, ProcessedFile
 
 
 def process_file(filepath: Path, python_binary: str) -> ProcessedFile:
