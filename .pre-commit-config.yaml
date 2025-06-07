@@ -1,0 +1,29 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.11
+    hooks:
+      # Run the linter and sort imports (via `--select I`).
+      - id: ruff-check
+        args: [--fix, --select, I]
+      # Run the formatter.
+      - id: ruff-format
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      # Attempts to load all TOML files to verify syntax.
+      - id: check-toml
+      # Attempts to load all YAML files to verify syntax.
+      - id: check-yaml
+      # Makes sure files end in a newline and only a newline.
+      - id: end-of-file-fixer
+      # Trims trailing whitespace.
+      - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: python-doctest
+        name: python doctest
+        entry: python3 -m doctest
+        language: system
+        pass_filenames: true
+        require_serial: true
+        types: [python]
