@@ -1,0 +1,8 @@
+- id: fencechecker
+  name: fencechecker
+  description: Execute Python fenced code blocks in Markdown files.
+  language: python
+  language_version: '3.13'
+  minimum_pre_commit_version: '4.2.0'
+  entry: fencechecker
+  types: [markdown]
