@@ -6,7 +6,7 @@ import typer
 from rich.console import Console
 
 from fencechecker.file import process_file, report_processed_file
-from fencechecker.types import ProcessedCodeBlock, ProcessedFile
+from fencechecker.models import ProcessedCodeBlock, ProcessedFile
 
 
 def app(

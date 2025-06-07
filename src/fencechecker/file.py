@@ -6,7 +6,7 @@ from rich.console import Console, Group
 from rich.panel import Panel
 from rich.syntax import Syntax
 
-from fencechecker.types import ProcessedCodeBlock, ProcessedFile
+from fencechecker.models import ProcessedCodeBlock, ProcessedFile
 
 
 def process_file(filepath: Path, python_binary: str) -> ProcessedFile:
@@ -18,29 +18,30 @@ def process_file(filepath: Path, python_binary: str) -> ProcessedFile:
     :return: Metadata about the processed file.
     """
     analyzer = MarkdownAnalyzer(str(filepath))
-    code_blocks = analyzer.identify_code_blocks().get("Code block")
-    py_code_blocks = [
+    code_blocks = analyzer.identify_code_blocks()["Code block"]
+    python_language_identifiers = ("python", "python3", "py", "py3")
+    python_code_blocks = [
         code_block
         for code_block in code_blocks
-        if code_block["language"] in ("python", "python3", "py", "py3")
+        if code_block["language"] in python_language_identifiers
     ]
     completed_processes = [
         subprocess.run(
-            [python_binary, "-c", code_block.get("content")], capture_output=True
+            [python_binary, "-c", code_block["content"]], capture_output=True
         )
-        for code_block in py_code_blocks
+        for code_block in python_code_blocks
     ]
     processed_code_blocks: list[ProcessedCodeBlock] = []
 
     for index, completed_process in enumerate(completed_processes):
-        code_block = py_code_blocks[index]
+        code_block = python_code_blocks[index]
 
         processed_code_blocks.append(
             {
                 "start_line": code_block["start_line"],
                 "content": code_block["content"],
                 "language": code_block["language"],
-                "return_code": completed_process.returncode,
+                "ran_ok": completed_process.returncode == 0,
             }
         )
 
@@ -67,13 +68,13 @@ def report_processed_file(
     :return: Nothing.
     """
     for code_block in processed_file["code_blocks"]:
-        if only_report_errors and code_block["return_code"] == 0:
+        if only_report_errors and code_block["ran_ok"]:
             continue
 
         syntax = Syntax(code_block["content"], "python")
-        status_color = "green" if code_block["return_code"] == 0 else "red"
-        status_title = "OK" if code_block["return_code"] == 0 else "Error"
-        status_icon = "✔" if code_block["return_code"] == 0 else "✘"
+        status_color = "green" if code_block["ran_ok"] else "red"
+        status_title = "OK" if code_block["ran_ok"] else "Error"
+        status_icon = "✔" if code_block["ran_ok"] else "✘"
         filepath = processed_file["filepath"]
         status_markup = (
             f"[bold {status_color}]{status_icon} {status_title}[/bold {status_color}]"
@@ -86,6 +87,6 @@ def report_processed_file(
         group = Group(f"{status_markup} {file_info_markup}", Panel(syntax))
         file_report = Panel(group)
 
-        console.print(file_report) if code_block[
-            "return_code"
-        ] == 0 else err_console.print(file_report)
+        console.print(file_report) if code_block["ran_ok"] else err_console.print(
+            file_report
+        )

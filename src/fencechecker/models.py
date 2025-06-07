@@ -12,7 +12,7 @@ class ProcessedCodeBlock(TypedDict):
     start_line: int
     content: str
     language: str
-    return_code: int
+    ran_ok: bool
 
 
 class ProcessedFile(TypedDict):
