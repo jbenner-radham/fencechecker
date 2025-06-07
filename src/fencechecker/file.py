@@ -10,6 +10,13 @@ from fencechecker.types import ProcessedCodeBlock, ProcessedFile
 
 
 def process_file(filepath: Path, python_binary: str) -> ProcessedFile:
+    """
+    Process the fenced code blocks in the given filepath.
+
+    :param filepath: Path to the file to be processed.
+    :param python_binary: The python binary to run the code.
+    :return: Metadata about the processed file.
+    """
     analyzer = MarkdownAnalyzer(str(filepath))
     code_blocks = analyzer.identify_code_blocks().get("Code block")
     py_code_blocks = [
@@ -50,6 +57,15 @@ def report_processed_file(
     err_console: Console,
     only_report_errors: bool,
 ) -> None:
+    """
+    Print a report to stderr/stdout regarding the processing of the provided file.
+
+    :param processed_file: Metadata about the processed file.
+    :param console: The console used to print to stdout.
+    :param err_console: The console used to print to stderr.
+    :param only_report_errors: Only report errors when `True`.
+    :return: Nothing.
+    """
     for code_block in processed_file["code_blocks"]:
         if only_report_errors and code_block["return_code"] == 0:
             continue
