@@ -13,6 +13,7 @@ def app(
     filepaths: Annotated[
         list[Path],
         typer.Argument(
+            show_default=False,
             help="The Markdown files to process.",
             exists=True,
             file_okay=True,
