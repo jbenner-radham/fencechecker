@@ -1,7 +1,8 @@
 fencechecker
 ============
 
-A CLI app that will execute any fenced code blocks of Python in Markdown files to ensure they don't raise any errors.
+A CLI app that will execute any fenced code blocks of Python in Markdown files
+to ensure they don't raise any errors.
 
 ![Animated demo of fencechecker.](images/demo.gif)
 
@@ -25,8 +26,8 @@ Usage
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
-**NOTE**: The exit code of the app is the number of errors encountered. Thus, a run without issue will exit with a code
-          of `0`.
+**NOTE**: The exit code of the app is the number of errors encountered. Thus, a
+run without issue will exit with a code of `0`.
 
 Example
 -------
