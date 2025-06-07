@@ -2,7 +2,6 @@ fencechecker
 ============
 
 A CLI app that will execute any fenced code blocks of Python in Markdown files to ensure they don't raise any errors.
-Ideally used for code examples which utilize `assert` statements.
 
 ![Animated demo of fencechecker.](images/demo.gif)
 
