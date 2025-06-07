@@ -11,9 +11,9 @@ Usage
 
 ```sh-session
 ❯ fencechecker --help
-                                                                                
- Usage: fencechecker [OPTIONS] FILEPATHS...                                     
-                                                                                
+
+ Usage: fencechecker [OPTIONS] FILEPATHS...
+
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
 │ *    filepaths      FILEPATHS...  The Markdown files to process. [required]  │
 ╰──────────────────────────────────────────────────────────────────────────────╯
