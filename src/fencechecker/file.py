@@ -15,7 +15,7 @@ def process_file(filepath: Path, python_binary: str) -> ProcessedFile:
     py_code_blocks = [
         code_block
         for code_block in code_blocks
-        if code_block.get("language") == "python" or "python3"
+        if code_block["language"] in ("python", "python3", "py", "py3")
     ]
     completed_processes = [
         subprocess.run(
