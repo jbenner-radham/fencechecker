@@ -20,6 +20,7 @@ repos:
       - id: trailing-whitespace
   - repo: local
     hooks:
+      # Test the code in docstrings.
       - id: python-doctest
         name: python doctest
         entry: python3 -m doctest
