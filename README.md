@@ -4,8 +4,6 @@ fencechecker
 A CLI app that will execute any fenced code blocks of Python in Markdown files
 to ensure they don't raise any errors.
 
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-
 ![Animated demo of fencechecker.](images/demo.gif)
 
 Usage
