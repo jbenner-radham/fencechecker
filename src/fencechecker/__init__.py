@@ -39,6 +39,8 @@ def app(
     err_console = Console(stderr=True)
     total_errors = 0
 
+    # TODO: Check that filepath is a Markdown file.
+
     for filepath in filepaths:
         processed_file = process_file(filepath, python_binary=python_binary)
         total_errors += processed_file["error_count"]
