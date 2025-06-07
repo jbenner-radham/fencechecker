@@ -40,6 +40,7 @@ def app(
     total_errors = 0
 
     for filepath in filepaths:
+        console.log(filepath)
         processed_file = process_file(filepath, python_binary=python_binary)
         total_errors += processed_file["error_count"]
 
