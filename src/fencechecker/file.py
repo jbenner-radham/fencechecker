@@ -45,7 +45,10 @@ def process_file(filepath: Path, python_binary: str) -> ProcessedFile:
 
 
 def report_processed_file(
-    processed_file: ProcessedFile, console: Console, only_report_errors: bool
+    processed_file: ProcessedFile,
+    console: Console,
+    err_console: Console,
+    only_report_errors: bool,
 ) -> None:
     for code_block in processed_file["code_blocks"]:
         if only_report_errors and code_block["return_code"] == 0:
@@ -65,5 +68,8 @@ def report_processed_file(
         file_line_markup = f"line: {code_block['start_line']}"
         file_info_markup = f"({file_link_markup} at {file_line_markup})"
         group = Group(f"{status_markup} {file_info_markup}", Panel(syntax))
+        file_report = Panel(group)
 
-        console.print(Panel(group))
+        console.print(file_report) if code_block[
+            "return_code"
+        ] == 0 else err_console.print(file_report)

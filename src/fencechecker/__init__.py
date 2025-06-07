@@ -36,6 +36,7 @@ def app(
     ] = "python3",
 ) -> None:
     console = Console()
+    err_console = Console(stderr=True)
     total_errors = 0
 
     for filepath in filepaths:
@@ -43,10 +44,17 @@ def app(
         total_errors += processed_file["error_count"]
 
         report_processed_file(
-            processed_file, console=console, only_report_errors=only_report_errors
+            processed_file,
+            console=console,
+            err_console=err_console,
+            only_report_errors=only_report_errors,
         )
 
-    console.print(f"{os.linesep}[bold]Total Errors: {total_errors}")
+    total_errors_message = f"{os.linesep}[bold]Total Errors: {total_errors}"
+
+    console.print(total_errors_message) if total_errors == 0 else err_console.print(
+        total_errors_message
+    )
 
     raise typer.Exit(code=total_errors)
 
