@@ -54,8 +54,11 @@ def report_processed_file(
         syntax = Syntax(code_block["content"], "python")
         status_color = "green" if code_block["return_code"] == 0 else "red"
         status_title = "OK" if code_block["return_code"] == 0 else "Error"
+        status_icon = "✔" if code_block["return_code"] == 0 else "✘"
         filepath = processed_file["filepath"]
-        status_markup = f"[bold {status_color}]{status_title}[/bold {status_color}]"
+        status_markup = (
+            f"[bold {status_color}]{status_icon} {status_title}[/bold {status_color}]"
+        )
         file_link_markup = (
             f"[link=file://{filepath.absolute()}]{filepath.absolute()}[/link]"
         )
