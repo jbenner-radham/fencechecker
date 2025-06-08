@@ -41,6 +41,8 @@ def app(
 
     # TODO: Check that filepath is a Markdown file.
 
+    # TODO: What if a Markdown file doesn't have any code blocks?
+
     for filepath in filepaths:
         processed_file = process_file(filepath, python_binary=python_binary)
         total_errors += processed_file["error_count"]
