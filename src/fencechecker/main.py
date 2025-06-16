@@ -67,7 +67,7 @@ def main(
         typer.Option(
             "--version",
             "-v",
-            help="Print the version info and exit.",
+            help="Print version info and exit.",
             callback=version_callback,
         ),
     ] = False,
