@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-fencechecker = "fencechecker:main"
+fencechecker = "fencechecker.main:app"
 
 [build-system]
 requires = ["hatchling"]
