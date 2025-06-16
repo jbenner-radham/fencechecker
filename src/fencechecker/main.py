@@ -15,7 +15,7 @@ def main(
     filepaths: Annotated[
         list[Path],
         typer.Argument(
-            help="The Markdown files to process.",
+            help="Check these Markdown files.",
             show_default=False,
             exists=True,
             file_okay=True,
