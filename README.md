@@ -15,14 +15,19 @@ Usage
  Usage: fencechecker [OPTIONS] FILEPATHS...
 
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
-│ *    filepaths      FILEPATHS...  The Markdown files to process. [required]  │
+│ *    filepaths      FILEPATHS...  Check these Markdown files. [required]     │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
 │ --only-report-errors  -e            Only include errors when reporting.      │
 │ --python-binary       -p      TEXT  Use this Python binary to execute code.  │
 │                                     [default: python3]                       │
 │ --venv-path           -V      PATH  Operate within this virtualenv.          │
-│ --help                              Show this message and exit.              │
+│ --install-completion                Install completion for the current       │
+│                                     shell.                                   │
+│ --show-completion                   Show completion for the current shell,   │
+│                                     to copy it or customize the              │
+│                                     installation.                            │
+│ --help                -h            Show this message and exit.              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
