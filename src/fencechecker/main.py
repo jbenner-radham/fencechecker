@@ -1,4 +1,5 @@
 import os
+import tomllib
 from pathlib import Path
 from typing import Annotated
 
@@ -8,6 +9,19 @@ from rich.console import Console
 from fencechecker.file import process_file, report_processed_file
 
 app = typer.Typer()
+
+
+def version_callback(value: bool) -> None:
+    if value:
+        with open(Path(__file__).parent.resolve() / "../../pyproject.toml", "rb") as fp:
+            pyproject = tomllib.load(fp)
+
+        console = Console()
+        console.print(
+            f"{pyproject['project']['name']} {pyproject['project']['version']}"
+        )
+
+        raise typer.Exit(code=0)
 
 
 @app.command(context_settings={"help_option_names": ["--help", "-h"]})
@@ -48,14 +62,27 @@ def main(
             readable=True,
         ),
     ] = None,
+    version: Annotated[
+        bool,
+        typer.Option(
+            "--version",
+            "-v",
+            help="Print the version info and exit.",
+            callback=version_callback,
+        ),
+    ] = False,
 ) -> None:
     console = Console()
     err_console = Console(stderr=True)
     total_errors = 0
     activate_this_path = (
-        venv_path / "Scripts" / "activate_this.py"
-        if os.name == "nt"
-        else venv_path / "bin" / "activate_this.py"
+        ""
+        if venv_path is None
+        else (
+            venv_path / "Scripts" / "activate_this.py"
+            if os.name == "nt"
+            else venv_path / "bin" / "activate_this.py"
+        )
     )
     code_prefix = (
         f"import runpy;runpy.run_path('{activate_this_path!s}');" if venv_path else None
