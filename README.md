@@ -19,9 +19,9 @@ Usage
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
 │ --only-report-errors  -e            Only include errors when reporting.      │
-│ --python-binary       -p      TEXT  The Python binary to use to execute      │
-│                                     code.                                    │
+│ --python-binary       -p      TEXT  Use this Python binary to execute code.  │
 │                                     [default: python3]                       │
+│ --venv-path           -V      PATH  Operate within this virtualenv.          │
 │ --help                              Show this message and exit.              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```

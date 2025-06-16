@@ -9,12 +9,15 @@ from rich.syntax import Syntax
 from fencechecker.models import ProcessedCodeBlock, ProcessedFile
 
 
-def process_file(filepath: Path, python_binary: str) -> ProcessedFile:
+def process_file(
+    filepath: Path, python_binary: str, code_prefix: str | None
+) -> ProcessedFile:
     """
     Process the fenced code blocks in the given filepath.
 
     :param filepath: Path to the file to be processed.
     :param python_binary: The python binary to run the code.
+    :param code_prefix: Code to prepend to the code block source.
     :return: Metadata about the processed file.
     """
     analyzer = MarkdownAnalyzer(str(filepath))
@@ -27,7 +30,12 @@ def process_file(filepath: Path, python_binary: str) -> ProcessedFile:
     ]
     completed_processes = [
         subprocess.run(
-            [python_binary, "-c", code_block["content"]], capture_output=True
+            [
+                python_binary,
+                "-c",
+                f"{code_prefix if code_prefix else ''}{code_block['content']}",
+            ],
+            capture_output=True,
         )
         for code_block in python_code_blocks
     ]
