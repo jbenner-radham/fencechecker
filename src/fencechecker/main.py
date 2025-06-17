@@ -97,8 +97,6 @@ def main(
 
     # TODO: Check that filepath is a Markdown file.
 
-    # TODO: What if a Markdown file doesn't have any code blocks?
-
     # TODO: Implement asyncio to make it faster to run MD files with lots of code blocks.
 
     for filepath in filepaths:
