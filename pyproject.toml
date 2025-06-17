@@ -1,7 +1,7 @@
 [project]
 name = "fencechecker"
 version = "0.1.0"
-description = "A CLI app that will execute any fenced code blocks of Python in Markdown files to ensure they don't raise any errors."
+description = "Check Python fenced code blocks in Markdown files."
 readme = "README.md"
 authors = [
     { name = "James Benner", email = "james.benner@gmail.com" }
