@@ -21,7 +21,7 @@ def process_file(
     :return: Metadata about the processed file.
     """
     analyzer = MarkdownAnalyzer(str(filepath))
-    code_blocks = analyzer.identify_code_blocks()["Code block"]
+    code_blocks = analyzer.identify_code_blocks().get("Code block", [])
     python_language_identifiers = ("python", "python3", "py", "py3")
     python_code_blocks = [
         code_block
