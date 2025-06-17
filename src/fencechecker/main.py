@@ -72,6 +72,9 @@ def main(
         ),
     ] = False,
 ) -> None:
+    """
+    Check Python fenced code blocks in Markdown files.
+    """
     console = Console()
     err_console = Console(stderr=True)
     total_errors = 0
@@ -95,7 +98,7 @@ def main(
 
         raise typer.Exit(code=-1)
 
-    # TODO: Check that filepath is a Markdown file.
+    # TODO: Check that filepath is a Markdown file?
 
     # TODO: Implement asyncio to make it faster to run MD files with lots of code blocks.
 
