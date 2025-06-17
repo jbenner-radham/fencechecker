@@ -12,7 +12,7 @@ MD001: true
 # MD003/heading-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md003.md
 MD003:
   # Heading style
-  style: "consistent"
+  style: "setext_with_atx"
 
 # MD004/ul-style : Unordered list style : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md004.md
 MD004:
@@ -202,6 +202,8 @@ MD043:
   headings:
     - '# fencechecker'
     - '## Usage'
+    - '### [Pre-commit](https://pre-commit.com/)'
+    - '### CLI'
     - '## Example'
     - '## License'
   # Match case of headings
