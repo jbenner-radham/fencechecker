@@ -71,26 +71,20 @@ def main(
     console = Console()
     err_console = Console(stderr=True)
     total_errors = 0
-    activate_this_path = (
-        ""
-        if venv_path is None
-        else (
-            venv_path / "Scripts" / "activate_this.py"
-            if os.name == "nt"
-            else venv_path / "bin" / "activate_this.py"
-        )
-    )
-    code_prefix = (
-        f"import runpy;runpy.run_path('{activate_this_path!s}');" if venv_path else None
-    )
+    code_prefix: str | None = None
 
-    if venv_path and not activate_this_path.exists():
-        err_console.print(
-            "[bold red]✘ Error[/bold red]: Cannot activate virtual environment."
-            + f" The [bold]{activate_this_path}[/bold] path does not exist."
-        )
+    if venv_path:
+        venv_bin_path_part = "Scripts" if os.name == "nt" else "bin"
+        activate_this_path = venv_path / venv_bin_path_part / "activate_this.py"
+        code_prefix = f"import runpy;runpy.run_path('{activate_this_path!s}');"
 
-        raise typer.Exit(code=-1)
+        if not activate_this_path.exists():
+            err_console.print(
+                "[bold red]✘ Error[/bold red]: Cannot activate virtual environment."
+                + f" The [bold]{activate_this_path}[/bold] path does not exist."
+            )
+
+            raise typer.Exit(code=-1)
 
     # TODO: Check that filepath is a Markdown file?
 
