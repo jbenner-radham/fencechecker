@@ -6,6 +6,7 @@ from typing import Annotated
 import typer
 from rich.console import Console
 
+from fencechecker.config import default_python_binary
 from fencechecker.file import process_file, report_processed_file
 
 app = typer.Typer()
@@ -49,7 +50,7 @@ def main(
             "-p",
             help="Use this Python binary to execute code.",
         ),
-    ] = "python3",
+    ] = default_python_binary,
     venv_path: Annotated[
         Path | None,
         typer.Option(
