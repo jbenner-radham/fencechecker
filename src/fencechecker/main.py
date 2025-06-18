@@ -1,5 +1,5 @@
 import os
-import tomllib
+from importlib import metadata
 from pathlib import Path
 from typing import Annotated
 
@@ -12,15 +12,9 @@ from fencechecker.file import process_file, report_processed_file
 app = typer.Typer()
 
 
-def version_callback(value: bool) -> None:
-    if value:
-        with open(Path(__file__).parent.resolve() / "../../pyproject.toml", "rb") as fp:
-            pyproject = tomllib.load(fp)
-
-        console = Console()
-        console.print(
-            f"{pyproject['project']['name']} {pyproject['project']['version']}"
-        )
+def version_callback(show_version: bool) -> None:
+    if show_version:
+        Console().print(f"fencechecker {metadata.version('fencechecker')}")
 
         raise typer.Exit(code=0)
 
