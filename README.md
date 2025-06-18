@@ -16,7 +16,7 @@ You can add `fencechecker` to your `.pre-commit-config.yaml` like so:
 ```yaml
 repos:
   - repo: https://github.com/jbenner-radham/fencechecker
-    rev: 77a877e
+    rev: 8ac64cc
     hooks:
       # Check Python fenced code blocks in Markdown files.
       - id: fencechecker
