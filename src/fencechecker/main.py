@@ -73,9 +73,7 @@ def main(
         ),
     ] = False,
 ) -> None:
-    """
-    Check Python fenced code blocks in Markdown files.
-    """
+    """Check Python fenced code blocks in Markdown files."""
     console = Console()
     err_console = Console(stderr=True)
     total_errors = 0
