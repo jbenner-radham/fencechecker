@@ -39,6 +39,9 @@ modules and dependencies.
 
  Usage: fencechecker [OPTIONS] FILEPATHS...
 
+ Check Python fenced code blocks in Markdown files.
+
+
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
 │ *    filepaths      FILEPATHS...  Check these Markdown files. [required]     │
 ╰──────────────────────────────────────────────────────────────────────────────╯
