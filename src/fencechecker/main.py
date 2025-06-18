@@ -77,11 +77,28 @@ def main(
         venv_bin_path_part = "Scripts" if os.name == "nt" else "bin"
         activate_this_path = venv_path / venv_bin_path_part / "activate_this.py"
         code_prefix = f"import runpy;runpy.run_path('{activate_this_path!s}');"
+        cannot_activate_venv_msg = (
+            "[bold red]✘ Error[/bold red]: Cannot activate virtual environment."
+        )
 
         if not activate_this_path.exists():
             err_console.print(
-                "[bold red]✘ Error[/bold red]: Cannot activate virtual environment."
+                cannot_activate_venv_msg
                 + f" The [bold]{activate_this_path}[/bold] path does not exist."
+            )
+
+            raise typer.Exit(code=-1)
+        elif not activate_this_path.is_file():
+            err_console.print(
+                cannot_activate_venv_msg
+                + f" The [bold]{activate_this_path}[/bold] path is not a file."
+            )
+
+            raise typer.Exit(code=-1)
+        elif not os.access(activate_this_path, os.R_OK):
+            err_console.print(
+                cannot_activate_venv_msg
+                + f" The [bold]{activate_this_path}[/bold] path is not readable."
             )
 
             raise typer.Exit(code=-1)
