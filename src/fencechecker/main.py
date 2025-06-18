@@ -56,7 +56,7 @@ def main(
         typer.Option(
             "--venv-path",
             "-V",
-            help="Operate within this virtualenv.",
+            help="Operate within this virtual environment.",
             show_default=False,
             exists=True,
             dir_okay=True,
@@ -92,7 +92,8 @@ def main(
 
     if venv_path and not activate_this_path.exists():
         err_console.print(
-            f"[bold red]✘ Error[/bold red]: Cannot activate virtualenv. The [bold]{activate_this_path}[/bold] path does not exist."
+            "[bold red]✘ Error[/bold red]: Cannot activate virtual environment."
+            + f" The [bold]{activate_this_path}[/bold] path does not exist."
         )
 
         raise typer.Exit(code=-1)

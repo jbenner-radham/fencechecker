@@ -29,8 +29,8 @@ use the rev specified above. If you desire to use a different rev you can pull
 this repo down and run `git rev-parse --short HEAD` to get the rev.
 
 **NOTE**: You will almost assuredly need to set the `--venv-path` flag to define
-your virtualenv so that `fencechecker` will be able to locate your project
-modules and dependencies.
+your virtual environment so that `fencechecker` will be able to locate your
+project modules and dependencies.
 
 ### CLI
 
@@ -49,7 +49,7 @@ modules and dependencies.
 │ --only-report-errors  -e            Only include errors when reporting.      │
 │ --python-binary       -p      TEXT  Use this Python binary to execute code.  │
 │                                     [default: python3]                       │
-│ --venv-path           -V      PATH  Operate within this virtualenv.          │
+│ --venv-path           -V      PATH  Operate within this virtual environment. │
 │ --version             -v            Print version info and exit.             │
 │ --install-completion                Install completion for the current       │
 │                                     shell.                                   │
