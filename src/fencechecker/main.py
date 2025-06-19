@@ -8,6 +8,11 @@ from rich.console import Console
 
 from fencechecker.config import default_python_binary
 from fencechecker.file import process_file, report_processed_file
+from fencechecker.venv import (
+    autodiscover_venv_path,
+    get_activate_this_path_and_code_prefix,
+    validate_activate_this_path,
+)
 
 app = typer.Typer()
 
@@ -31,6 +36,9 @@ def main(
             readable=True,
         ),
     ],
+    autodiscover_venv: Annotated[
+        bool, typer.Option(help="Autodiscover and activate a virtual environment.")
+    ] = True,
     only_report_errors: Annotated[
         bool,
         typer.Option(
@@ -74,32 +82,13 @@ def main(
     code_prefix: str | None = None
 
     if venv_path:
-        venv_bin_path_part = "Scripts" if os.name == "nt" else "bin"
-        activate_this_path = venv_path / venv_bin_path_part / "activate_this.py"
-        code_prefix = f"import runpy;runpy.run_path('{activate_this_path!s}');"
-        cannot_activate_venv_msg = (
-            "[bold red]✘ Error[/bold red]: Cannot activate virtual environment."
+        activate_this_path, code_prefix = get_activate_this_path_and_code_prefix(
+            venv_path
         )
+        error = validate_activate_this_path(activate_this_path)
 
-        if not activate_this_path.exists():
-            err_console.print(
-                cannot_activate_venv_msg
-                + f" The [bold]{activate_this_path}[/bold] path does not exist."
-            )
-
-            raise typer.Exit(code=-1)
-        elif not activate_this_path.is_file():
-            err_console.print(
-                cannot_activate_venv_msg
-                + f" The [bold]{activate_this_path}[/bold] path is not a file."
-            )
-
-            raise typer.Exit(code=-1)
-        elif not os.access(activate_this_path, os.R_OK):
-            err_console.print(
-                cannot_activate_venv_msg
-                + f" The [bold]{activate_this_path}[/bold] path is not readable."
-            )
+        if error:
+            err_console.print(error)
 
             raise typer.Exit(code=-1)
 
@@ -108,6 +97,27 @@ def main(
     # TODO: Implement asyncio to make it faster to run MD files with lots of code blocks.
 
     for filepath in filepaths:
+        if not venv_path and autodiscover_venv:
+            discovered_venv_path = autodiscover_venv_path(filepath)
+
+            if not discovered_venv_path:
+                err_console.print(
+                    "[bold red]✘ Error[/bold red]"
+                    + " (Could not autodiscover a virtual environment for the filepath"
+                    + f" [link=file://{filepath.absolute()}]{filepath}[/link])"
+                )
+                raise typer.Exit(code=-1)
+            else:
+                activate_this_path, code_prefix = (
+                    get_activate_this_path_and_code_prefix(discovered_venv_path)
+                )
+                error = validate_activate_this_path(activate_this_path)
+
+                if error:
+                    err_console.print(error)
+
+                    raise typer.Exit(code=-1)
+
         processed_file = process_file(
             filepath, python_binary=python_binary, code_prefix=code_prefix
         )
