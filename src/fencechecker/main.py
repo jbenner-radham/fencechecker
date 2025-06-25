@@ -85,9 +85,8 @@ def main(
         activate_this_path, code_prefix = get_activate_this_path_and_code_prefix(
             venv_path
         )
-        error = validate_activate_this_path(activate_this_path)
 
-        if error:
+        if error := validate_activate_this_path(activate_this_path):
             err_console.print(error)
 
             raise typer.Exit(code=-1)
@@ -111,9 +110,8 @@ def main(
                 activate_this_path, code_prefix = (
                     get_activate_this_path_and_code_prefix(discovered_venv_path)
                 )
-                error = validate_activate_this_path(activate_this_path)
 
-                if error:
+                if error := validate_activate_this_path(activate_this_path):
                     err_console.print(error)
 
                     raise typer.Exit(code=-1)
